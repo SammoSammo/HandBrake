@@ -26,6 +26,7 @@ namespace Handbrake.Functions
 
     using OutputFormat = HandBrake.ApplicationServices.Model.Encoding.OutputFormat;
     using UserSettingConstants = Handbrake.UserSettingConstants;
+    using HandBrake.ApplicationServices.Parsing;
 
     /// <summary>
     /// Generate a CLI Query for HandBrakeCLI
@@ -97,13 +98,29 @@ namespace Handbrake.Functions
 
             return queueTask;
         }
-        public static QueueTask GenerateFullQueryForBatchTitle(frmMain mainWindow, string outputPath, BatchTitle batchTitle)
+        public static QueueTask GenerateFullQueryForBatchTitle(frmMain mainWindow, BatchTitle batchTitle)
         {
+            int? angle = null;
+
+            if (mainWindow.drop_angle.SelectedItem != null)
+            {
+                string selectedAngleStr = mainWindow.drop_angle.SelectedItem.ToString();
+
+                int tempAngle;
+                if (int.TryParse(selectedAngleStr, out tempAngle))
+                {
+                    angle = tempAngle;
+                }
+            }
+
+            string sourcePath = mainWindow.sourcePath;
+
             // Create the CLI Query
             string query = string.Empty;
-            query += SourceQuery(mainWindow, mainWindow.drop_mode.SelectedIndex, 0, null);
-            query += DestinationQuery(mainWindow, QueryEncodeMode.Standard);
-            query += GenerateTabbedComponentsQuery(mainWindow, true, QueryPictureSettingsMode.UserInterfaceSettings, 0, 0);
+
+            query += SourceQuery(sourcePath, batchTitle, angle);
+            query += DestinationQuery(batchTitle);
+            query += GenerateTabbedComponentsQuery(batchTitle, mainWindow, true, QueryPictureSettingsMode.UserInterfaceSettings, 0, 0);
 
             // Create the Queue Task and setup the EncodeTask model object.
 
@@ -120,7 +137,7 @@ namespace Handbrake.Functions
                 isCustom = false;
             }
 
-            EncodeTask task = CreateEncodeTaskObjectFromBatch(batchTitle, outputPath, mainWindow);
+            EncodeTask task = CreateEncodeTaskObjectFromBatch(batchTitle, mainWindow);
 
             QueueTask queueTask = new QueueTask(query)
             {
@@ -162,6 +179,41 @@ namespace Handbrake.Functions
 
             // Chapter Markers
             query += ChapterMarkersQuery(mainWindow);
+
+            // X264 Panel
+            query += X264Query(mainWindow);
+
+            // Extra Settings
+            query += ExtraSettings();
+
+            return query;
+        }
+
+        private static string GenerateTabbedComponentsQuery(BatchTitle batchTitle, frmMain mainWindow, bool filters, QueryPictureSettingsMode mode, int width, int height)
+        {
+            string query = string.Empty;
+
+            // Output Settings
+            query += OutputSettingsQuery(mainWindow);
+
+            // Filters Panel
+            if (filters)
+                query += FiltersQuery(mainWindow);
+
+            // Picture Settings
+            query += PictureSettingsQuery(mainWindow, mode, width, height);
+
+            // Video Settings
+            query += VideoSettingsQuery(mainWindow);
+
+            // Audio Settings
+            query += AudioSettingsQuery(mainWindow);
+
+            // Subtitles Panel
+            query += mainWindow.Subtitles.GetCliQuery;
+
+            // Chapter Markers
+            query += ChapterMarkersQuery(batchTitle, mainWindow);
 
             // X264 Panel
             query += X264Query(mainWindow);
@@ -240,6 +292,28 @@ namespace Handbrake.Functions
 
             return query;
         }
+        
+        private static string SourceQuery(string sourcePath, BatchTitle batchTitle, int? angle)
+        {
+            string query = string.Empty;
+
+            if (sourcePath.EndsWith("\\"))
+            {
+                query = " -i " + sourcePath;
+            }
+            else
+            {
+                query = " -i " + '"' + sourcePath + '"';
+            }
+
+            query += " -t " + batchTitle.TitleNumber;
+
+            if (!UserSettingService.GetUserSetting<bool>(ASUserSettingConstants.DisableLibDvdNav) && angle.HasValue)
+                query += " --angle " + angle;
+
+            query += string.Format(" -c {0}-{1}", batchTitle.Title.Chapters.Min(c => c.ChapterNumber), batchTitle.Title.Chapters.Max(c => c.ChapterNumber));
+            return query;
+        }
 
         private static string DestinationQuery(frmMain mainWindow, QueryEncodeMode mode)
         {
@@ -258,6 +332,11 @@ namespace Handbrake.Functions
                     query += string.Format(" -o \"{0}\" ", mainWindow.text_destination.Text.Replace(".m", "_sample.m"));
             }
 
+            return query;
+        }
+        private static string DestinationQuery(BatchTitle batchTitle)
+        {
+            string query = string.Format(" -o \"{0}\" ", batchTitle.OutputDestination);
             return query;
         }
 
@@ -557,6 +636,36 @@ namespace Handbrake.Functions
             return query;
         }
 
+
+        private static string ChapterMarkersQuery(BatchTitle batchTitle, frmMain mainWindow)
+        {
+            string query = string.Empty;
+
+            // Attach Source name and dvd title to the start of the chapters.csv filename.
+            // This is for the queue. It allows different chapter name files for each title.
+            string destName = Path.GetFileNameWithoutExtension(batchTitle.OutputDestination);
+            string sourceTitle = batchTitle.TitleNumber.ToString();
+
+            if (mainWindow.Check_ChapterMarkers.Checked && mainWindow.Check_ChapterMarkers.Enabled)
+            {
+                if (destName.Trim() != String.Empty)
+                {
+                    string path = sourceTitle != "Automatic"
+                                      ? Path.Combine(Path.GetTempPath(), destName + "-" + sourceTitle + "-chapters.csv")
+                                      : Path.Combine(Path.GetTempPath(), destName + "-chapters.csv");
+
+                    if (ChapterCsvSave(batchTitle.Title, path) == false)
+                        query += " -m ";
+                    else
+                        query += " --markers=" + "\"" + path + "\"";
+                }
+                else
+                    query += " -m";
+            }
+
+            return query;
+        }
+
         private static string X264Query(frmMain mainWindow)
         {
             string advancedOptions = string.Empty;
@@ -779,12 +888,12 @@ namespace Handbrake.Functions
         /// <returns>
         /// An EncodeTask Object
         /// </returns>
-        private static EncodeTask CreateEncodeTaskObjectFromBatch(BatchTitle batchTitle, string outputPath, frmMain frmMain)
+        private static EncodeTask CreateEncodeTaskObjectFromBatch(BatchTitle batchTitle,frmMain frmMain)
         {
             EncodeTask task = new EncodeTask();
 
             // Source, Destination and Output Settings
-            task.Destination = Path.Combine(outputPath, batchTitle.FileName);
+            task.Destination = batchTitle.OutputDestination;
 
             string sourcePath = frmMain.selectedTitle != null && File.Exists(frmMain.selectedTitle.SourceName) ? frmMain.selectedTitle.SourceName.Trim() : frmMain.sourcePath;
         
@@ -961,6 +1070,38 @@ namespace Handbrake.Functions
                     csv += row.Cells[0].Value.ToString();
                     csv += ",";
                     csv += row.Cells[1].Value.ToString().Replace(",", "\\,");
+                    csv += Environment.NewLine;
+                }
+                StreamWriter file = new StreamWriter(filePathName);
+                file.Write(csv);
+                file.Close();
+                file.Dispose();
+                return true;
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show("Unable to save Chapter Makrers file! \nChapter marker names will NOT be saved in your encode \n\n" + exc, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Create a CSV file with the data from the Main Window Chapters tab
+        /// </summary>
+        /// <param name="title">Title of the chapters you wish to save.</param>
+        /// <param name="filePathName">Path to save the csv file</param>
+        /// <returns>True if successful </returns>
+        private static bool ChapterCsvSave(Title title, string filePathName)
+        {
+            try
+            {
+                string csv = string.Empty;
+
+                foreach (var chapter in title.Chapters)
+                {
+                    csv += chapter.ChapterNumber;
+                    csv += ",";
+                    csv += chapter.ChapterName.Replace(",", "\\,");
                     csv += Environment.NewLine;
                 }
                 StreamWriter file = new StreamWriter(filePathName);

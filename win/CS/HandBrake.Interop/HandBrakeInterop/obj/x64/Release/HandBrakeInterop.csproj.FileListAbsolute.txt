@@ -1,0 +1,5 @@
+C:\Users\Samuel\Projects\HandBrake\win\CS\HandBrake.Interop\HandBrakeInterop\bin\x64\Release\HandBrakeInterop.dll
+C:\Users\Samuel\Projects\HandBrake\win\CS\HandBrake.Interop\HandBrakeInterop\bin\x64\Release\HandBrakeInterop.pdb
+C:\Users\Samuel\Projects\HandBrake\win\CS\HandBrake.Interop\HandBrakeInterop\obj\x64\Release\ResolveAssemblyReference.cache
+C:\Users\Samuel\Projects\HandBrake\win\CS\HandBrake.Interop\HandBrakeInterop\obj\x64\Release\HandBrakeInterop.dll
+C:\Users\Samuel\Projects\HandBrake\win\CS\HandBrake.Interop\HandBrakeInterop\obj\x64\Release\HandBrakeInterop.pdb

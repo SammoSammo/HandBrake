@@ -1159,7 +1159,7 @@ namespace Handbrake
 
                 foreach (var title in titles)
                 {
-                    var query = QueryGenerator.GenerateFullQueryForBatchTitle(this, batchWindow.OutputPath, title);
+                    var query = QueryGenerator.GenerateFullQueryForBatchTitle(this, title);
                     this.queueProcessor.QueueManager.Add(query);
                     
                 }

@@ -23,15 +23,6 @@ namespace Handbrake
 
         protected BatchTitle[] BatchTitles { get; set; }
 
-        public string OutputPath
-        {
-            get
-            {
-                return text_destination.Text;   
-            }
-        }
-        private List<string> titles = null;
-
         TimeSpan minTimespan;
         TimeSpan maxTimespan;
 
@@ -58,6 +49,11 @@ namespace Handbrake
 
         private void btn_Ok_Click(object sender, EventArgs e)
         {
+            foreach (var title in BatchTitles)
+            {
+                title.OutputFolder = text_destination.Text;
+            }
+
             this.Close();
         }
 
@@ -68,10 +64,7 @@ namespace Handbrake
 
         private void frmAddBatch_Load(object sender, EventArgs e)
         {
-            if (titles == null)
-            {
-                RefreshTitles();
-            }
+            RefreshTitles();
         }
 
         private void RefreshTitles()
