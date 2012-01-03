@@ -98,7 +98,6 @@ namespace Handbrake
             this.Label47 = new System.Windows.Forms.Label();
             this.Label3 = new System.Windows.Forms.Label();
             this.tab_audio = new System.Windows.Forms.TabPage();
-            this.AudioSettings = new Handbrake.Controls.AudioPanel();
             this.AudioMenuRowHeightHack = new System.Windows.Forms.ImageList(this.components);
             this.tab_video = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -109,18 +108,13 @@ namespace Handbrake
             this.lbl_SliderValue = new System.Windows.Forms.Label();
             this.lbl_framerate = new System.Windows.Forms.Label();
             this.tab_picture = new System.Windows.Forms.TabPage();
-            this.PictureSettings = new Handbrake.Controls.PictureSettings();
             this.Check_ChapterMarkers = new System.Windows.Forms.CheckBox();
             this.tabs_panel = new System.Windows.Forms.TabControl();
             this.tab_filters = new System.Windows.Forms.TabPage();
-            this.Filters = new Handbrake.Controls.Filters();
             this.tab_subtitles = new System.Windows.Forms.TabPage();
-            this.Subtitles = new Handbrake.Controls.Subtitles();
             this.tab_chapters = new System.Windows.Forms.TabPage();
             this.label31 = new System.Windows.Forms.Label();
             this.tab_advanced = new System.Windows.Forms.TabPage();
-            this.advancedEncoderOpts = new Handbrake.Controls.AdvancedEncoderOpts();
-            this.x264Panel = new Handbrake.Controls.x264Panel();
             this.tab_query = new System.Windows.Forms.TabPage();
             this.btn_clear = new System.Windows.Forms.Button();
             this.label34 = new System.Windows.Forms.Label();
@@ -150,6 +144,7 @@ namespace Handbrake
             this.btn_add2Queue = new System.Windows.Forms.ToolStripSplitButton();
             this.mnu_AddAllTitles = new System.Windows.Forms.ToolStripMenuItem();
             this.mnu_AddTittleRange = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnu_AddBatch = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_showQueue = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tb_preview = new System.Windows.Forms.ToolStripButton();
@@ -166,6 +161,7 @@ namespace Handbrake
             this.ProgressBarStatus = new System.Windows.Forms.ToolStripProgressBar();
             this.lbl_encode = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbl_updateCheck = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lbl_libhb_warning = new System.Windows.Forms.ToolStripStatusLabel();
             this.hbproc = new System.Diagnostics.Process();
             this.File_Save = new System.Windows.Forms.SaveFileDialog();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -184,7 +180,12 @@ namespace Handbrake
             this.SourceLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.openPreset = new System.Windows.Forms.OpenFileDialog();
             this.File_ChapterImport = new System.Windows.Forms.OpenFileDialog();
-            this.lbl_libhb_warning = new System.Windows.Forms.ToolStripStatusLabel();
+            this.PictureSettings = new Handbrake.Controls.PictureSettings();
+            this.Filters = new Handbrake.Controls.Filters();
+            this.AudioSettings = new Handbrake.Controls.AudioPanel();
+            this.Subtitles = new Handbrake.Controls.Subtitles();
+            this.advancedEncoderOpts = new Handbrake.Controls.AdvancedEncoderOpts();
+            this.x264Panel = new Handbrake.Controls.x264Panel();
             notifyIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             notifyIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).BeginInit();
@@ -246,8 +247,8 @@ namespace Handbrake
             // 
             // text_destination
             // 
-            this.text_destination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.text_destination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.text_destination.Location = new System.Drawing.Point(36, 3);
             this.text_destination.Name = "text_destination";
             this.text_destination.Size = new System.Drawing.Size(603, 21);
@@ -282,7 +283,7 @@ namespace Handbrake
             this.check_largeFile.TabIndex = 2;
             this.check_largeFile.Text = "Large file size";
             this.ToolTip.SetToolTip(this.check_largeFile, "Caution: This option will likely break device compatibility with all but the Appl" +
-        "eTV Take 2.\r\nChecking this box enables a 64bit mp4 file which can be over 4GB.");
+                    "eTV Take 2.\r\nChecking this box enables a 64bit mp4 file which can be over 4GB.");
             this.check_largeFile.UseVisualStyleBackColor = false;
             // 
             // check_turbo
@@ -352,8 +353,8 @@ namespace Handbrake
             this.check_optimiseMP4.TabIndex = 3;
             this.check_optimiseMP4.Text = "Web optimized";
             this.ToolTip.SetToolTip(this.check_optimiseMP4, "MP4 files can be optimized for progressive downloads over the Web,\r\nbut note that" +
-        " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
-        "ly be used with H.264 ");
+                    " QuickTime can only read the files as long as the file extension is .mp4\r\nCan on" +
+                    "ly be used with H.264 ");
             this.check_optimiseMP4.UseVisualStyleBackColor = false;
             // 
             // check_iPodAtom
@@ -367,7 +368,7 @@ namespace Handbrake
             this.check_iPodAtom.TabIndex = 4;
             this.check_iPodAtom.Text = "iPod 5G support";
             this.ToolTip.SetToolTip(this.check_iPodAtom, "Support for legacy 5th Generation iPods.\r\nEncodes will not sync if this option is" +
-        " not enabled for H.264 encodes.");
+                    " not enabled for H.264 encodes.");
             this.check_iPodAtom.UseVisualStyleBackColor = false;
             // 
             // data_chpt
@@ -493,8 +494,8 @@ namespace Handbrake
             this.drp_dvdtitle.Size = new System.Drawing.Size(119, 21);
             this.drp_dvdtitle.TabIndex = 1;
             this.ToolTip.SetToolTip(this.drp_dvdtitle, "Select the title you wish to encode.\r\n\r\nWhen a DVD is in use, HandBrake will try " +
-        "to determine the \"Main Feature\" title automatically.\r\nPlease note, this is not a" +
-        "lways accurate and should be checked.");
+                    "to determine the \"Main Feature\" title automatically.\r\nPlease note, this is not a" +
+                    "lways accurate and should be checked.");
             this.drp_dvdtitle.SelectedIndexChanged += new System.EventHandler(this.drp_dvdtitle_SelectedIndexChanged);
             this.drp_dvdtitle.Click += new System.EventHandler(this.drp_dvdtitle_Click);
             // 
@@ -552,8 +553,8 @@ namespace Handbrake
             this.btn_generate_Query.TabIndex = 2;
             this.btn_generate_Query.Text = "Generate Query";
             this.ToolTip.SetToolTip(this.btn_generate_Query, "This will allow you to override the generated query.\r\nNote, The query in the box " +
-        "below will always override any automatically generated query, even if you change" +
-        " title or source.");
+                    "below will always override any automatically generated query, even if you change" +
+                    " title or source.");
             this.btn_generate_Query.UseVisualStyleBackColor = true;
             this.btn_generate_Query.Click += new System.EventHandler(this.btn_generate_Query_Click);
             // 
@@ -823,15 +824,6 @@ namespace Handbrake
             this.tab_audio.Text = "Audio";
             this.tab_audio.UseVisualStyleBackColor = true;
             // 
-            // AudioSettings
-            // 
-            this.AudioSettings.BackColor = System.Drawing.Color.Transparent;
-            this.AudioSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AudioSettings.Location = new System.Drawing.Point(0, 0);
-            this.AudioSettings.Name = "AudioSettings";
-            this.AudioSettings.Size = new System.Drawing.Size(720, 310);
-            this.AudioSettings.TabIndex = 0;
-            // 
             // AudioMenuRowHeightHack
             // 
             this.AudioMenuRowHeightHack.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -951,18 +943,6 @@ namespace Handbrake
             this.tab_picture.Text = "Picture";
             this.tab_picture.UseVisualStyleBackColor = true;
             // 
-            // PictureSettings
-            // 
-            this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
-            this.PictureSettings.CurrentlySelectedPreset = null;
-            this.PictureSettings.Enabled = false;
-            this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PictureSettings.Location = new System.Drawing.Point(0, 0);
-            this.PictureSettings.Name = "PictureSettings";
-            this.PictureSettings.PresetMaximumResolution = new System.Drawing.Size(0, 0);
-            this.PictureSettings.Size = new System.Drawing.Size(666, 279);
-            this.PictureSettings.TabIndex = 0;
-            // 
             // Check_ChapterMarkers
             // 
             this.Check_ChapterMarkers.AutoSize = true;
@@ -1001,15 +981,6 @@ namespace Handbrake
             this.tab_filters.Text = "Video Filters";
             this.tab_filters.UseVisualStyleBackColor = true;
             // 
-            // Filters
-            // 
-            this.Filters.BackColor = System.Drawing.Color.Transparent;
-            this.Filters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Filters.Location = new System.Drawing.Point(0, 0);
-            this.Filters.Name = "Filters";
-            this.Filters.Size = new System.Drawing.Size(713, 310);
-            this.Filters.TabIndex = 0;
-            // 
             // tab_subtitles
             // 
             this.tab_subtitles.Controls.Add(this.Subtitles);
@@ -1020,15 +991,6 @@ namespace Handbrake
             this.tab_subtitles.TabIndex = 4;
             this.tab_subtitles.Text = "Subtitles";
             this.tab_subtitles.UseVisualStyleBackColor = true;
-            // 
-            // Subtitles
-            // 
-            this.Subtitles.BackColor = System.Drawing.Color.Transparent;
-            this.Subtitles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Subtitles.Location = new System.Drawing.Point(0, 0);
-            this.Subtitles.Name = "Subtitles";
-            this.Subtitles.Size = new System.Drawing.Size(722, 310);
-            this.Subtitles.TabIndex = 0;
             // 
             // tab_chapters
             // 
@@ -1068,26 +1030,6 @@ namespace Handbrake
             this.tab_advanced.TabIndex = 6;
             this.tab_advanced.Text = "Advanced";
             this.tab_advanced.UseVisualStyleBackColor = true;
-            // 
-            // advancedEncoderOpts
-            // 
-            this.advancedEncoderOpts.AdavancedQuery = "";
-            this.advancedEncoderOpts.BackColor = System.Drawing.Color.Transparent;
-            this.advancedEncoderOpts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.advancedEncoderOpts.Location = new System.Drawing.Point(0, 0);
-            this.advancedEncoderOpts.Name = "advancedEncoderOpts";
-            this.advancedEncoderOpts.Size = new System.Drawing.Size(720, 209);
-            this.advancedEncoderOpts.TabIndex = 1;
-            // 
-            // x264Panel
-            // 
-            this.x264Panel.BackColor = System.Drawing.Color.Transparent;
-            this.x264Panel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.x264Panel.Location = new System.Drawing.Point(0, 0);
-            this.x264Panel.Name = "x264Panel";
-            this.x264Panel.Size = new System.Drawing.Size(720, 306);
-            this.x264Panel.TabIndex = 0;
-            this.x264Panel.X264Query = "";
             // 
             // tab_query
             // 
@@ -1320,8 +1262,8 @@ namespace Handbrake
             this.btn_dvd_source.Image = global::Handbrake.Properties.Resources.folder;
             this.btn_dvd_source.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btn_dvd_source.Name = "btn_dvd_source";
-            this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.O)));
+            this.btn_dvd_source.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift)
+                        | System.Windows.Forms.Keys.O)));
             this.btn_dvd_source.Size = new System.Drawing.Size(182, 22);
             this.btn_dvd_source.Text = "Folder";
             this.btn_dvd_source.Click += new System.EventHandler(this.BtnFolderScanClicked);
@@ -1377,7 +1319,8 @@ namespace Handbrake
             this.btn_add2Queue.DropDownButtonWidth = 20;
             this.btn_add2Queue.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mnu_AddAllTitles,
-            this.mnu_AddTittleRange});
+            this.mnu_AddTittleRange,
+            this.mnu_AddBatch});
             this.btn_add2Queue.Image = global::Handbrake.Properties.Resources.AddToQueue;
             this.btn_add2Queue.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.btn_add2Queue.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -1390,19 +1333,26 @@ namespace Handbrake
             // mnu_AddAllTitles
             // 
             this.mnu_AddAllTitles.Name = "mnu_AddAllTitles";
-            this.mnu_AddAllTitles.Size = new System.Drawing.Size(152, 22);
+            this.mnu_AddAllTitles.Size = new System.Drawing.Size(138, 22);
             this.mnu_AddAllTitles.Text = "Add All";
             this.mnu_AddAllTitles.ToolTipText = "Add all titles to the queue.\r\nUse caution with this feature as incorrect usage ma" +
-    "y result in a queue of failed encodes.";
+                "y result in a queue of failed encodes.";
             this.mnu_AddAllTitles.Click += new System.EventHandler(this.mnu_AddAllTitles_Click);
             // 
             // mnu_AddTittleRange
             // 
             this.mnu_AddTittleRange.Name = "mnu_AddTittleRange";
-            this.mnu_AddTittleRange.Size = new System.Drawing.Size(152, 22);
+            this.mnu_AddTittleRange.Size = new System.Drawing.Size(138, 22);
             this.mnu_AddTittleRange.Text = "Add Range";
             this.mnu_AddTittleRange.Visible = false;
             this.mnu_AddTittleRange.Click += new System.EventHandler(this.mnu_AddTittleRange_Click);
+            // 
+            // mnu_AddBatch
+            // 
+            this.mnu_AddBatch.Name = "mnu_AddBatch";
+            this.mnu_AddBatch.Size = new System.Drawing.Size(138, 22);
+            this.mnu_AddBatch.Text = "Add Batch...";
+            this.mnu_AddBatch.Click += new System.EventHandler(this.mnu_AddBatch_Click);
             // 
             // btn_showQueue
             // 
@@ -1439,7 +1389,7 @@ namespace Handbrake
             this.btn_ActivityWindow.Size = new System.Drawing.Size(130, 36);
             this.btn_ActivityWindow.Text = "Activity Window";
             this.btn_ActivityWindow.ToolTipText = "Displays the activity window which displays the log of the last completed or curr" +
-    "ently running encode.";
+                "ently running encode.";
             this.btn_ActivityWindow.Click += new System.EventHandler(this.btn_ActivityWindow_Click);
             // 
             // toolStripSeparator8
@@ -1552,6 +1502,14 @@ namespace Handbrake
             this.lbl_updateCheck.Size = new System.Drawing.Size(139, 17);
             this.lbl_updateCheck.Text = "Checking for Updates ...";
             this.lbl_updateCheck.Visible = false;
+            // 
+            // lbl_libhb_warning
+            // 
+            this.lbl_libhb_warning.ForeColor = System.Drawing.Color.Red;
+            this.lbl_libhb_warning.Name = "lbl_libhb_warning";
+            this.lbl_libhb_warning.Size = new System.Drawing.Size(198, 17);
+            this.lbl_libhb_warning.Text = "Warning: Experimental LibHB in use!";
+            this.lbl_libhb_warning.Visible = false;
             // 
             // hbproc
             // 
@@ -1768,13 +1726,64 @@ namespace Handbrake
             // 
             this.File_ChapterImport.Filter = "CSV Files|*.csv";
             // 
-            // lbl_libhb_warning
+            // PictureSettings
             // 
-            this.lbl_libhb_warning.ForeColor = System.Drawing.Color.Red;
-            this.lbl_libhb_warning.Name = "lbl_libhb_warning";
-            this.lbl_libhb_warning.Size = new System.Drawing.Size(198, 17);
-            this.lbl_libhb_warning.Text = "Warning: Experimental LibHB in use!";
-            this.lbl_libhb_warning.Visible = false;
+            this.PictureSettings.BackColor = System.Drawing.Color.Transparent;
+            this.PictureSettings.CurrentlySelectedPreset = null;
+            this.PictureSettings.Enabled = false;
+            this.PictureSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PictureSettings.Location = new System.Drawing.Point(0, 0);
+            this.PictureSettings.Name = "PictureSettings";
+            this.PictureSettings.PresetMaximumResolution = new System.Drawing.Size(0, 0);
+            this.PictureSettings.Size = new System.Drawing.Size(666, 279);
+            this.PictureSettings.TabIndex = 0;
+            // 
+            // Filters
+            // 
+            this.Filters.BackColor = System.Drawing.Color.Transparent;
+            this.Filters.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Filters.Location = new System.Drawing.Point(0, 0);
+            this.Filters.Name = "Filters";
+            this.Filters.Size = new System.Drawing.Size(713, 310);
+            this.Filters.TabIndex = 0;
+            // 
+            // AudioSettings
+            // 
+            this.AudioSettings.BackColor = System.Drawing.Color.Transparent;
+            this.AudioSettings.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AudioSettings.Location = new System.Drawing.Point(0, 0);
+            this.AudioSettings.Name = "AudioSettings";
+            this.AudioSettings.Size = new System.Drawing.Size(720, 310);
+            this.AudioSettings.TabIndex = 0;
+            // 
+            // Subtitles
+            // 
+            this.Subtitles.BackColor = System.Drawing.Color.Transparent;
+            this.Subtitles.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Subtitles.Location = new System.Drawing.Point(0, 0);
+            this.Subtitles.Name = "Subtitles";
+            this.Subtitles.Size = new System.Drawing.Size(722, 310);
+            this.Subtitles.TabIndex = 0;
+            // 
+            // advancedEncoderOpts
+            // 
+            this.advancedEncoderOpts.AdavancedQuery = "";
+            this.advancedEncoderOpts.BackColor = System.Drawing.Color.Transparent;
+            this.advancedEncoderOpts.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.advancedEncoderOpts.Location = new System.Drawing.Point(0, 0);
+            this.advancedEncoderOpts.Name = "advancedEncoderOpts";
+            this.advancedEncoderOpts.Size = new System.Drawing.Size(720, 209);
+            this.advancedEncoderOpts.TabIndex = 1;
+            // 
+            // x264Panel
+            // 
+            this.x264Panel.BackColor = System.Drawing.Color.Transparent;
+            this.x264Panel.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.x264Panel.Location = new System.Drawing.Point(0, 0);
+            this.x264Panel.Name = "x264Panel";
+            this.x264Panel.Size = new System.Drawing.Size(720, 306);
+            this.x264Panel.TabIndex = 0;
+            this.x264Panel.X264Query = "";
             // 
             // frmMain
             // 
@@ -1801,7 +1810,7 @@ namespace Handbrake
             this.MinimumSize = new System.Drawing.Size(900, 500);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "HandBrake";
+            this.Text = "HandBrake - SammoSammo Branch";
             notifyIconMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.slider_videoQuality)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.data_chpt)).EndInit();
@@ -1993,5 +2002,6 @@ namespace Handbrake
         private ToolStripMenuItem mnu_AddAllTitles;
         private ToolStripMenuItem mnu_AddTittleRange;
         private ToolStripStatusLabel lbl_libhb_warning;
+        private ToolStripMenuItem mnu_AddBatch;
     }
 }

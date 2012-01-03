@@ -57,6 +57,7 @@ namespace Handbrake
 
         // Windows ************************************************************
         private frmQueue queueWindow;
+        private frmAddBatch batchWindow;
         private frmPreview qtpreview;
         private frmActivityWindow activityWindow;
 
@@ -1115,6 +1116,59 @@ namespace Handbrake
         }
 
         /// <summary>
+        /// Provides a user with a form to provide a batch list of titles to import.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The EventArgs.
+        /// </param>
+        private void mnu_AddBatch_Click(object sender, EventArgs e)
+        {
+            AddBatchOfTitles();
+        }
+
+        /// <summary>
+        /// Add Multiple Items to the Queue at once, based on what a user has selected.
+        /// </summary>
+        /// <param name="addRange">
+        /// The add Range.
+        /// </param>
+        private void AddBatchOfTitles()
+        {
+            if (this.SourceScan.SouceData == null)
+            {
+                MessageBox.Show(
+                    "You must first scan a source before you can use this feature. Select the 'Source' button on the toolbar.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+
+            if (batchWindow == null || batchWindow.IsDisposed)
+            {
+                batchWindow = new frmAddBatch(this, this.SourceScan.SouceData);
+            }
+
+            if (batchWindow.ShowDialog() == DialogResult.OK)
+            {
+                var titles = batchWindow.GetIncludedBatchTitles();
+
+                foreach (var title in titles)
+                {
+                    var query = QueryGenerator.GenerateFullQueryForBatchTitle(this, batchWindow.OutputPath, title);
+                    this.queueProcessor.QueueManager.Add(query);
+                    
+                }
+
+                lbl_encode.Text = this.queueProcessor.QueueManager.Count + " encode(s) pending in the queue";
+            }
+        }
+
+        /// <summary>
         /// Add Multiple Items to the Queue at once.
         /// </summary>
         /// <param name="addRange">
@@ -1210,6 +1264,52 @@ namespace Handbrake
             // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
             string jobSourcePath = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetSourceFromQuery(rtf_query.Text) : sourcePath;
             string jobDestination = !string.IsNullOrEmpty(rtf_query.Text) ? Main.GetDestinationFromQuery(rtf_query.Text) : text_destination.Text;
+
+            // Make sure we have a Source and Destination.
+            if (string.IsNullOrEmpty(jobSourcePath) || string.IsNullOrEmpty(jobDestination))
+            {
+                if (showError)
+                    MessageBox.Show("No source or destination selected.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            // Make sure we don't have a duplciate on the queue.
+            if (this.queueProcessor.QueueManager.CheckForDestinationPathDuplicates(jobDestination))
+            {
+                if (showError)
+                {
+                    DialogResult result;
+                    result =
+                        MessageBox.Show(
+                            string.Format(
+                                "There is already a queue item for this destination path.\nDestination Path: {0} \n\nIf you continue, the encode will be overwritten. Do you wish to continue?",
+                                jobDestination),
+                            "Warning",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Warning);
+
+                    if (result != DialogResult.Yes) return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            // Add the job.
+            QueueTask query = QueryGenerator.GenerateFullQuery(this);
+            this.queueProcessor.QueueManager.Add(query);
+
+            lbl_encode.Text = this.queueProcessor.QueueManager.Count + " encode(s) pending in the queue";
+
+            return true;
+        }
+
+        private bool AddBatchTitleToQueue(string outputPath, BatchTitle title, bool showError)
+        {
+            // If we have a custom query, then we'll want to figure out what the new source and destination is, otherwise we'll just use the gui components.
+            string jobSourcePath = sourcePath;
+            string jobDestination = Path.Combine(outputPath, title.FileName);
 
             // Make sure we have a Source and Destination.
             if (string.IsNullOrEmpty(jobSourcePath) || string.IsNullOrEmpty(jobDestination))
