@@ -150,5 +150,69 @@ namespace Handbrake
             string autoNamePath = userSettingService.GetUserSetting<string>(UserSettingConstants.AutoNamePath);
             return autoNamePath;
         }
+
+        private void dgv_DiscTitles_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex > -1)
+            {
+                BeginEditingFileName(e.RowIndex);
+            }
+        }
+
+        private void dgv_DiscTitles_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex > -1 && e.RowIndex < dgv_DiscTitles.Rows.Count)
+            {
+                BeginEditingFileName(e.RowIndex);
+            }
+        }
+
+        private void BeginEditingFileName(int rowNum)
+        {
+            dgv_DiscTitles.Rows[rowNum].Cells["dgvTitles_FileName"].Selected = true;
+
+            dgv_DiscTitles.BeginEdit(false);
+
+            var editControl = dgv_DiscTitles.EditingControl as DataGridViewTextBoxEditingControl;
+
+            if (editControl != null && !string.IsNullOrEmpty(editControl.Text))
+            {
+                //select just the file name bit, this makes it quicker to edit.
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(editControl.Text);
+                editControl.Select(0, fileNameWithoutExtension.Length);
+            }
+        }
+
+        private void dgv_DiscTitles_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            //if we're leaving the title cell, ensure the text is a valid file name.
+            if (e.RowIndex > -1 && e.ColumnIndex == dgv_DiscTitles.Columns["dgvTitles_FileName"].Index)
+            {
+                var cell = dgv_DiscTitles.Rows[e.RowIndex].Cells[e.ColumnIndex] as DataGridViewTextBoxCell;
+
+                if (cell != null && cell.Value != null && !string.IsNullOrEmpty(cell.Value.ToString()))
+                {
+                    string originalValue = cell.Value.ToString();
+                    string value = originalValue;
+
+                    int initLength = value.Length;
+
+                    foreach (var badChar in Path.GetInvalidFileNameChars())
+                    {
+                        value = value.Replace(badChar.ToString(), string.Empty);
+                    }
+
+                    if (value.Length < originalValue.Length)
+                    {
+                        string message = string.Format("The filename you have entered has invalid characters. Would you like to replace it with the name '{0}'?", value);
+
+                        if (MessageBox.Show(message, "Invalid character in file name", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+                        {
+                              cell.Value = value;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

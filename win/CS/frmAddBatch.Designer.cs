@@ -30,6 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAddBatch));
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.dgv_DiscTitles = new System.Windows.Forms.DataGridView();
+            this.dgvTitles_Include = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dgvTitles_TitleNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvTitles_FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvTitles_Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.Label3 = new System.Windows.Forms.Label();
             this.text_destination = new System.Windows.Forms.TextBox();
@@ -37,17 +43,11 @@
             this.panel3 = new System.Windows.Forms.Panel();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.btn_Ok = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.dgv_DiscTitles = new System.Windows.Forms.DataGridView();
-            this.dgvTitles_Include = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.dgvTitles_TitleNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvTitles_FileName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dgvTitles_Duration = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
-            this.panel3.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_DiscTitles)).BeginInit();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -60,6 +60,70 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(638, 561);
             this.panel1.TabIndex = 8;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.dgv_DiscTitles);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(0, 29);
+            this.panel2.Name = "panel2";
+            this.panel2.Padding = new System.Windows.Forms.Padding(3);
+            this.panel2.Size = new System.Drawing.Size(638, 502);
+            this.panel2.TabIndex = 17;
+            // 
+            // dgv_DiscTitles
+            // 
+            this.dgv_DiscTitles.AllowUserToAddRows = false;
+            this.dgv_DiscTitles.AllowUserToDeleteRows = false;
+            this.dgv_DiscTitles.AllowUserToResizeRows = false;
+            this.dgv_DiscTitles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgv_DiscTitles.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.dgv_DiscTitles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv_DiscTitles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvTitles_Include,
+            this.dgvTitles_TitleNumber,
+            this.dgvTitles_FileName,
+            this.dgvTitles_Duration});
+            this.dgv_DiscTitles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgv_DiscTitles.Location = new System.Drawing.Point(3, 3);
+            this.dgv_DiscTitles.Margin = new System.Windows.Forms.Padding(6);
+            this.dgv_DiscTitles.Name = "dgv_DiscTitles";
+            this.dgv_DiscTitles.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            this.dgv_DiscTitles.RowHeadersVisible = false;
+            this.dgv_DiscTitles.Size = new System.Drawing.Size(632, 496);
+            this.dgv_DiscTitles.TabIndex = 18;
+            this.dgv_DiscTitles.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_DiscTitles_CellEnter);
+            this.dgv_DiscTitles.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv_DiscTitles_CellMouseClick);
+            this.dgv_DiscTitles.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv_DiscTitles_CellValueChanged);
+            // 
+            // dgvTitles_Include
+            // 
+            this.dgvTitles_Include.DataPropertyName = "Include";
+            this.dgvTitles_Include.FillWeight = 10F;
+            this.dgvTitles_Include.HeaderText = "";
+            this.dgvTitles_Include.Name = "dgvTitles_Include";
+            // 
+            // dgvTitles_TitleNumber
+            // 
+            this.dgvTitles_TitleNumber.DataPropertyName = "TitleNumber";
+            this.dgvTitles_TitleNumber.FillWeight = 25F;
+            this.dgvTitles_TitleNumber.HeaderText = "Title Number";
+            this.dgvTitles_TitleNumber.Name = "dgvTitles_TitleNumber";
+            this.dgvTitles_TitleNumber.ReadOnly = true;
+            // 
+            // dgvTitles_FileName
+            // 
+            this.dgvTitles_FileName.DataPropertyName = "FileName";
+            this.dgvTitles_FileName.HeaderText = "File Name";
+            this.dgvTitles_FileName.Name = "dgvTitles_FileName";
+            // 
+            // dgvTitles_Duration
+            // 
+            this.dgvTitles_Duration.DataPropertyName = "Duration";
+            this.dgvTitles_Duration.FillWeight = 20F;
+            this.dgvTitles_Duration.HeaderText = "Duration";
+            this.dgvTitles_Duration.Name = "dgvTitles_Duration";
+            this.dgvTitles_Duration.ReadOnly = true;
             // 
             // tableLayoutPanel2
             // 
@@ -152,66 +216,6 @@
             this.btn_Ok.UseVisualStyleBackColor = true;
             this.btn_Ok.Click += new System.EventHandler(this.btn_Ok_Click);
             // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.dgv_DiscTitles);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 29);
-            this.panel2.Name = "panel2";
-            this.panel2.Padding = new System.Windows.Forms.Padding(3);
-            this.panel2.Size = new System.Drawing.Size(638, 502);
-            this.panel2.TabIndex = 17;
-            // 
-            // dgv_DiscTitles
-            // 
-            this.dgv_DiscTitles.AllowUserToAddRows = false;
-            this.dgv_DiscTitles.AllowUserToDeleteRows = false;
-            this.dgv_DiscTitles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgv_DiscTitles.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.dgv_DiscTitles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv_DiscTitles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.dgvTitles_Include,
-            this.dgvTitles_TitleNumber,
-            this.dgvTitles_FileName,
-            this.dgvTitles_Duration});
-            this.dgv_DiscTitles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgv_DiscTitles.Location = new System.Drawing.Point(3, 3);
-            this.dgv_DiscTitles.Margin = new System.Windows.Forms.Padding(6);
-            this.dgv_DiscTitles.Name = "dgv_DiscTitles";
-            this.dgv_DiscTitles.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            this.dgv_DiscTitles.RowHeadersVisible = false;
-            this.dgv_DiscTitles.Size = new System.Drawing.Size(632, 496);
-            this.dgv_DiscTitles.TabIndex = 18;
-            // 
-            // dgvTitles_Include
-            // 
-            this.dgvTitles_Include.DataPropertyName = "Include";
-            this.dgvTitles_Include.FillWeight = 10F;
-            this.dgvTitles_Include.HeaderText = "";
-            this.dgvTitles_Include.Name = "dgvTitles_Include";
-            // 
-            // dgvTitles_TitleNumber
-            // 
-            this.dgvTitles_TitleNumber.DataPropertyName = "TitleNumber";
-            this.dgvTitles_TitleNumber.FillWeight = 25F;
-            this.dgvTitles_TitleNumber.HeaderText = "Title Number";
-            this.dgvTitles_TitleNumber.Name = "dgvTitles_TitleNumber";
-            this.dgvTitles_TitleNumber.ReadOnly = true;
-            // 
-            // dgvTitles_FileName
-            // 
-            this.dgvTitles_FileName.DataPropertyName = "FileName";
-            this.dgvTitles_FileName.HeaderText = "File Name";
-            this.dgvTitles_FileName.Name = "dgvTitles_FileName";
-            // 
-            // dgvTitles_Duration
-            // 
-            this.dgvTitles_Duration.DataPropertyName = "Duration";
-            this.dgvTitles_Duration.FillWeight = 20F;
-            this.dgvTitles_Duration.HeaderText = "Duration";
-            this.dgvTitles_Duration.Name = "dgvTitles_Duration";
-            this.dgvTitles_Duration.ReadOnly = true;
-            // 
             // frmAddBatch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -225,12 +229,12 @@
             this.Load += new System.EventHandler(this.frmAddBatch_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgv_DiscTitles)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgv_DiscTitles)).EndInit();
             this.ResumeLayout(false);
 
         }
