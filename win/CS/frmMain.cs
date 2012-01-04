@@ -1165,6 +1165,7 @@ namespace Handbrake
                 }
 
                 lbl_encode.Text = this.queueProcessor.QueueManager.Count + " encode(s) pending in the queue";
+                this.queueWindow.Show(true);
             }
         }
 
