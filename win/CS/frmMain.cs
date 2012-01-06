@@ -57,7 +57,6 @@ namespace Handbrake
 
         // Windows ************************************************************
         private frmQueue queueWindow;
-        private frmAddBatch batchWindow;
         private frmPreview qtpreview;
         private frmActivityWindow activityWindow;
 
@@ -1147,12 +1146,8 @@ namespace Handbrake
                 return;
             }
 
-
-            if (batchWindow == null || batchWindow.IsDisposed)
-            {
-                batchWindow = new frmAddBatch(this, this.SourceScan.SouceData);
-            }
-
+            frmAddBatch batchWindow = new frmAddBatch(this, this.SourceScan.SouceData);
+            
             if (batchWindow.ShowDialog() == DialogResult.OK)
             {
                 var titles = batchWindow.GetIncludedBatchTitles();
